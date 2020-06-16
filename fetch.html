@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+
+    <script src="https://unpkg.com/react@15.5.4/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15.5.4/dist/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+    <title>Star Wars API</title>
+  </head>
+  <body>
+
+    <div id="app">React has not rendered yet</div>
+
+    <script type="text/babel">
+
+      class App extends React.Component{
+        constructor(props){
+          super(props);
+          this.state={
+            items: []
+          };
+        }
+
+        // componentDidMount
+        // most common use case: starting AJAX calls to load data for your component
+        // can call setState
+        componentDidMount(){
+          fetch('https://swapi.dev/api/people/')
+          // .then(function(response) {
+          //   return response.json()
+          // })
+
+            // fat arrow option, previous option works
+          .then(response => response.json())
+          .then(responseData => {
+            this.setState({
+              items: responseData.results
+            });
+          })
+          .catch(error => {
+            console.log('Fetching and parsing data error', error);
+          });
+
+        }
+
+        render(){
+          let items = this.state.items;
+          console.log(items);
+          return(
+            <div>
+            {items.map(function(item){
+              return <h4 key={item.name}>{item.name} skin color {item.skin_color}</h4>
+            })}
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(
+        <App/>,
+      document.getElementById("app")
+      );
+
+    </script>
+
+  </body>
+</html>
